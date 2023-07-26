@@ -1,0 +1,16 @@
+services:
+  wordpress:
+    image: wordpress
+    links:
+      - wordpress_db:mysql
+    ports:
+      - 8080:80
+
+  wordpress_db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: sdshdb
+      MYSQL_USER: sdshuser
+      MYSQL_PASSWORD: asjdhfgasdf7saddgahafg56

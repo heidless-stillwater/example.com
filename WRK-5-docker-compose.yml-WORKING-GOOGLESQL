@@ -1,0 +1,40 @@
+services:
+
+  sdsh_wordpress:
+    image: wordpress:php8.2 
+    depends_on:
+      - sdsh_wordpress_db
+    container_name: sdsh_wordpress
+    ports:
+      - "8000:80"
+    restart: always
+    links:
+      - sdsh_wordpress_db:mysql
+    volumes:
+      - ./src:/var/www/html
+
+  sdsh_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: sdsh_phpmyadmin
+    depends_on:
+      - sdsh_wordpress_db
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: sdsh_wordpress_db
+      MYSQL_ROOT_PASSWORD: password
+      UPLOAD_LIMIT: 500M
+
+  sdsh_wordpress_db:
+    image: mariadb
+    container_name: sdsh_wordpress_db
+    volumes:
+      - ./database/data:/var/lib/mysql
+      - ./database/initdb.d:/docker-entrypoint-initdb.d
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: dbs9334747
+      MYSQL_USER: dbu1703375
+      MYSQL_PASSWORD: "%ZDVyr0/ertR"

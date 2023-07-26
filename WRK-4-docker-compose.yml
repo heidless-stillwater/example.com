@@ -1,0 +1,40 @@
+services:
+
+  wordpress:
+    image: wordpress:php8.2 
+    depends_on:
+      - wordpress_db
+    container_name: wordpress
+    ports:
+      - "8000:80"
+    restart: always
+    links:
+      - wordpress_db:mysql
+    volumes:
+      - ./src:/var/www/html
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    depends_on:
+      - wordpress_db
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: wordpress_db
+      MYSQL_ROOT_PASSWORD: password
+      UPLOAD_LIMIT: 500M
+
+  wordpress_db:
+    image: mariadb
+    container_name: wordpress_db
+    volumes:
+      - ./database/data:/var/lib/mysql
+      - ./database/initdb.d:/docker-entrypoint-initdb.d
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: dbs9334747
+      MYSQL_USER: dbu1703375
+      MYSQL_PASSWORD: "%ZDVyr0/ertR"

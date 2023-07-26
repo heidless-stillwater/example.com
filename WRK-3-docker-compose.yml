@@ -1,0 +1,44 @@
+services:
+  wordpress:
+    image: wordpress
+    links:
+      - wordpress_db:mysql
+    ports:
+      - 8000:80
+    networks:
+      - wpsite
+
+  # phpmyadmin
+  phpmyadmin:
+    depends_on:
+      - wordpress_db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: wordpress_db
+      MYSQL_ROOT_PASSWORD: password
+      UPLOAD_LIMIT: 500M
+    networks:
+      - wpsite 
+
+  wordpress_db:
+    image: mariadb
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: dbs9334747
+      MYSQL_USER: dbu1703375
+      MYSQL_PASSWORD: "%ZDVyr0/ertR"
+    networks:
+      - wpsite
+
+networks:
+  wpsite:
+
+volumes:
+  db_data:
+
